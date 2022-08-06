@@ -24,10 +24,12 @@ export REPO_ROOT=$(pwd)
 
 cd $REPO_ROOT
 
+export KF_INSTALLED=false
 if [ "${KF_AWS_SERVICES_STR}" == "" ]; then
 	echo "Deploying Vanilla AWS distribution ..."
 	echo "Running kustomize loop ..."
 	while ! kustomize build deployments/vanilla | kubectl apply -f -; do echo "Retrying to apply resources"; sleep 30; done
+	export KF_INSTALLED=true
 
 else
 	echo "KF_AWS_SERVICES_STR: ${KF_AWS_SERVICES_STR}"
@@ -45,4 +47,21 @@ else
 	##while ! kustomize build deployments/rds-s3/rds-only | kubectl apply -f -; do echo "Retrying to apply resources"; sleep 30; done
 	##while ! kustomize build deployments/rds-s3/s3-only | kubectl apply -f -; do echo "Retrying to apply resources"; sleep 30; done
 
+	export KF_INSTALLED=false
+
+fi
+
+echo ""
+if [ "${KF_INSTALLED}" == "true" ]; then
+	echo "Kubeflow deployment succeeded" 
+	if [ "${KF_CLUSTER_ACCESS}" == "true" ]; then
+		echo "Granting cluster access to kubeflow profile user ..."
+		../../../configure/profile-admin.sh
+	fi
+	if [ "${KF_PIPELINES_ACCESS}" == "true" ]; then
+		echo "Setting up access to Kubeflow Pipelines ..."
+		../../../configure/profile-pod-default.sh
+	fi
+else
+	echo "Kubeflow deployment failed"
 fi
