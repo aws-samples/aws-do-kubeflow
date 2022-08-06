@@ -1,0 +1,68 @@
+apiVersion: kubeflow.org/v1
+kind: PyTorchJob
+metadata:
+  name: pytorch-cnn-dist-file-alex
+  namespace: alex
+spec:
+  cleanPodPolicy: Running
+  pytorchReplicaSpecs:
+    Master:
+      replicas: 1
+      restartPolicy: OnFailure
+      template:
+        metadata:
+          annotations:
+            sidecar.istio.io/inject: "false"
+        spec:
+          containers:
+          - args:
+            - python
+            - ./efs-shared/pipeline/mnist.py
+            - --epochs
+            - "5"
+            - --seed
+            - "7"
+            - --log-interval
+            - "60"
+            image: 763104351884.dkr.ecr.us-west-2.amazonaws.com/pytorch-training:1.12.0-gpu-py38-cu116-ubuntu20.04-e3
+            name: pytorch
+            resources:
+              limits:
+                nvidia.com/gpu: 1
+            volumeMounts:
+            - mountPath: /efs-shared
+              name: efs-shared
+          volumes:
+          - name: efs-shared
+            persistentVolumeClaim:
+              claimName: efs-pvc
+    Worker:
+      replicas: 4
+      restartPolicy: OnFailure
+      template:
+        metadata:
+          annotations:
+            sidecar.istio.io/inject: "false"
+        spec:
+          containers:
+          - args:
+            - python
+            - ./efs-shared/pipeline/mnist.py
+            - --epochs
+            - "5"
+            - --seed
+            - "7"
+            - --log-interval
+            - "60"
+            image: 763104351884.dkr.ecr.us-west-2.amazonaws.com/pytorch-training:1.12.0-gpu-py38-cu116-ubuntu20.04-e3
+            name: pytorch
+            resources:
+              limits:
+                nvidia.com/gpu: 1
+            volumeMounts:
+            - mountPath: /efs-shared
+              name: efs-shared
+          volumes:
+          - name: efs-shared
+            persistentVolumeClaim:
+              claimName: efs-pvc

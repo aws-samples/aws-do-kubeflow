@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: sc-claim-dlc
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: gp2
+  resources:
+    requests:
+      storage: 30Gi

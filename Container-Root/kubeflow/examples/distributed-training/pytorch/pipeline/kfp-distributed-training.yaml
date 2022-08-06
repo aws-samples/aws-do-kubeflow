@@ -1,0 +1,134 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  generateName: pytorch-training-pipeline-
+  annotations: {pipelines.kubeflow.org/kfp_sdk_version: 1.8.4, pipelines.kubeflow.org/pipeline_compilation_time: '2022-07-19T23:16:28.378766',
+    pipelines.kubeflow.org/pipeline_spec: '{"description": "Sample training job test",
+      "inputs": [{"default": "kubeflow-user-example-com", "name": "namespace", "optional":
+      true}], "name": "PyTorch Training pipeline"}'}
+  labels: {pipelines.kubeflow.org/kfp_sdk_version: 1.8.4}
+spec:
+  entrypoint: pytorch-training-pipeline
+  templates:
+  - name: distributed-training
+    container:
+      args:
+      - --name
+      - pytorch-cnn-dist
+      - --namespace
+      - alex
+      - --version
+      - v1
+      - --masterSpec
+      - '{           "replicas": 1,           "restartPolicy": "OnFailure",           "template":
+        {             "metadata": {               "annotations": {                 "sidecar.istio.io/inject":
+        "false"               }             },             "spec": {               "containers":
+        [                 {                   "name": "pytorch",                   "image":
+        "763104351884.dkr.ecr.us-west-2.amazonaws.com/pytorch-training:1.12.0-gpu-py38-cu116-ubuntu20.04-e3",                   "args":
+        [                     "python",                     "./efs-shared/pipeline/mnist.py",                     "--epochs",
+        "5",                     "--seed", "7",                     "--log-interval",
+        "60"                   ],                   "resources": {                     "limits":
+        {                       "nvidia.com/gpu": 1                     }                   },                   "volumeMounts":
+        [                     {                       "mountPath": "/efs-shared",                       "name":
+        "efs-shared"                     }                   ]                 }               ],               "volumes":
+        [                 {                   "name": "efs-shared",                   "persistentVolumeClaim":
+        {                     "claimName": "efs-pvc"                   }                 }               ]             }           }         }'
+      - --workerSpec
+      - '{           "replicas": 2,           "restartPolicy": "OnFailure",           "template":
+        {             "metadata": {               "annotations": {                 "sidecar.istio.io/inject":
+        "false"               }             },             "spec": {               "containers":
+        [                 {                   "name": "pytorch",                   "image":
+        "763104351884.dkr.ecr.us-west-2.amazonaws.com/pytorch-training:1.12.0-gpu-py38-cu116-ubuntu20.04-e3",                   "args":
+        [                     "python",                     "./efs-shared/pipeline/mnist.py",                     "--epochs",
+        "5",                     "--seed", "7",                     "--log-interval",
+        "60"                   ],                   "resources": {                     "limits":
+        {                       "nvidia.com/gpu": 1                     }                   },                   "volumeMounts":
+        [                     {                       "mountPath": "/efs-shared",                       "name":
+        "efs-shared"                     }                   ]                 }               ],               "volumes":
+        [                 {                   "name": "efs-shared",                   "persistentVolumeClaim":
+        {                     "claimName": "efs-pvc"                   }                 }               ]             }           }         }'
+      - --jobTimeoutMinutes
+      - '1440'
+      - --deleteAfterDone
+      - "False"
+      - --cleanPodPolicy
+      - Running
+      command: [python, /ml/launch_pytorchjob.py]
+      image: cascribner/kubeflow-pytorchjob-launcher:v1
+    metadata:
+      labels:
+        pipelines.kubeflow.org/kfp_sdk_version: 1.8.4
+        pipelines.kubeflow.org/pipeline-sdk-type: kfp
+        pipelines.kubeflow.org/enable_caching: "true"
+      annotations: {pipelines.kubeflow.org/component_spec: '{"description": "Kubeflow
+          PyTorchJob launcher", "implementation": {"container": {"args": ["--name",
+          {"inputValue": "name"}, "--namespace", {"inputValue": "namespace"}, "--version",
+          {"inputValue": "version"}, "--masterSpec", {"inputValue": "master_spec"},
+          "--workerSpec", {"inputValue": "worker_spec"}, "--jobTimeoutMinutes", {"inputValue":
+          "job_timeout_minutes"}, "--deleteAfterDone", {"inputValue": "delete_after_done"},
+          "--cleanPodPolicy", {"inputValue": "clean_pod_policy"}, {"if": {"cond":
+          {"isPresent": "active_deadline_seconds"}, "then": ["--activeDeadlineSeconds",
+          {"inputValue": "active_deadline_seconds"}]}}, {"if": {"cond": {"isPresent":
+          "backoff_limit"}, "then": ["--backoffLimit", {"inputValue": "backoff_limit"}]}},
+          {"if": {"cond": {"isPresent": "ttl_seconds_after_finished"}, "then": ["--ttlSecondsAfterFinished",
+          {"inputValue": "ttl_seconds_after_finished"}]}}], "command": ["python",
+          "/ml/launch_pytorchjob.py"], "image": "cascribner/kubeflow-pytorchjob-launcher:v1"}},
+          "inputs": [{"description": "PyTorchJob name.", "name": "name", "type": "String"},
+          {"default": "kubeflow", "description": "PyTorchJob namespace (likely your
+          current namespace).", "name": "namespace", "type": "String"}, {"default":
+          "v1", "description": "PyTorchJob version.", "name": "version", "type": "String"},
+          {"default": "{}", "description": "PyTorchJob Master replicaSpecs.", "name":
+          "master_spec", "type": "JsonObject"}, {"default": "{}", "description": "PyTorchJob
+          Worker replicaSpecs.", "name": "worker_spec", "type": "JsonObject"}, {"default":
+          1440, "description": "Time in minutes to wait for the job to complete.",
+          "name": "job_timeout_minutes", "type": "Integer"}, {"default": "True", "description":
+          "Whether to delete the job after it is finished.", "name": "delete_after_done",
+          "type": "Boolean"}, {"default": "Running", "description": "Defines the policy
+          for cleaning up pods after the PyTorchJob completes.", "name": "clean_pod_policy",
+          "type": "String"}, {"description": "Specifies the duration (in seconds)
+          since startTime during which the job can remain active before it is terminated.
+          Must be a positive integer. This setting applies only to pods where restartPolicy
+          is OnFailure or Always.", "name": "active_deadline_seconds", "optional":
+          true, "type": "Integer"}, {"description": "Number of retries before marking
+          this job as failed.", "name": "backoff_limit", "optional": true, "type":
+          "Integer"}, {"description": "Defines the TTL for cleaning up finished PyTorchJobs.",
+          "name": "ttl_seconds_after_finished", "optional": true, "type": "Integer"}]}',
+        pipelines.kubeflow.org/component_ref: '{"digest": "4fdb6ae871b46fb773a246147ee9858f7e709f4bcde0f712cce950f027afd466",
+          "url": "https://raw.githubusercontent.com/kubeflow/pipelines/master/components/kubeflow/pytorch-launcher/component.yaml"}',
+        pipelines.kubeflow.org/arguments.parameters: '{"clean_pod_policy": "Running",
+          "delete_after_done": "False", "job_timeout_minutes": "1440", "master_spec":
+          "{           \"replicas\": 1,           \"restartPolicy\": \"OnFailure\",           \"template\":
+          {             \"metadata\": {               \"annotations\": {                 \"sidecar.istio.io/inject\":
+          \"false\"               }             },             \"spec\": {               \"containers\":
+          [                 {                   \"name\": \"pytorch1\",                   \"image\":
+          \"763104351884.dkr.ecr.us-west-2.amazonaws.com/pytorch-training:1.12.0-gpu-py38-cu116-ubuntu20.04-e3\",                   \"args\":
+          [                     \"python\",                     \"./efs-shared/pipeline/mnist.py\",                     \"--epochs\",
+          \"5\",                     \"--seed\", \"7\",                     \"--log-interval\",
+          \"60\"                   ],                   \"resources\": {                     \"limits\":
+          {                       \"nvidia.com/gpu\": 1                     }                   },                   \"volumeMounts\":
+          [                     {                       \"mountPath\": \"/efs-shared\",                       \"name\":
+          \"efs-shared\"                     }                   ]                 }               ],               \"volumes\":
+          [                 {                   \"name\": \"efs-shared\",                   \"persistentVolumeClaim\":
+          {                     \"claimName\": \"efs-pvc\"                   }                 }               ]             }           }         }",
+          "name": "pytorch-cnn-dist-file-c3", "namespace": "kubeflow-user-example-com",
+          "version": "v1", "worker_spec": "{           \"replicas\": 1,           \"restartPolicy\":
+          \"OnFailure\",           \"template\": {             \"metadata\": {               \"annotations\":
+          {                 \"sidecar.istio.io/inject\": \"false\"               }             },             \"spec\":
+          {               \"containers\": [                 {                   \"name\":
+          \"pytorch2\",                   \"image\": \"763104351884.dkr.ecr.us-west-2.amazonaws.com/pytorch-training:1.12.0-gpu-py38-cu116-ubuntu20.04-e3\",                   \"args\":
+          [                     \"python\",                     \"./efs-shared/pipeline/mnist.py\",                     \"--epochs\",
+          \"5\",                     \"--seed\", \"7\",                     \"--log-interval\",
+          \"60\"                   ],                   \"resources\": {                     \"limits\":
+          {                       \"nvidia.com/gpu\": 1                     }                   },                   \"volumeMounts\":
+          [                     {                       \"mountPath\": \"/efs-shared\",                       \"name\":
+          \"efs-shared\"                     }                   ]                 }               ],               \"volumes\":
+          [                 {                   \"name\": \"efs-shared\",                   \"persistentVolumeClaim\":
+          {                     \"claimName\": \"efs-pvc\"                   }                 }               ]             }           }         }"}'}
+  - name: pytorch-training-pipeline
+    dag:
+      tasks:
+      - {name: distributed-training, template: distributed-training}
+  arguments:
+    parameters:
+    - {name: namespace, value: alex}
+  serviceAccountName: pipeline-runner

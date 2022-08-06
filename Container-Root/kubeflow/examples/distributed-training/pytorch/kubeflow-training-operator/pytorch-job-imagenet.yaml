@@ -1,0 +1,60 @@
+apiVersion: "kubeflow.org/v1"
+kind: "PyTorchJob"
+metadata:
+  name: "distributed-pytorch-job-imagenet"
+spec:
+  pytorchReplicaSpecs:
+    Master:
+      replicas: 1
+      restartPolicy: OnFailure
+      template:
+        metadata:
+          annotations:
+            sidecar.istio.io/inject: "false"
+        spec:
+          imagePullSecrets:
+          - name: ecr-token
+          containers:
+            - name: pytorch
+              image: <your_image>
+              # Comment out the below resources to use the CPU.
+              resources:
+                limits:
+                  nvidia.com/gpu: 1
+              command:
+                - python
+                - -m
+                - torch.distributed.run
+                - imagenet.py
+                - "--arch=resnet18"
+                - "--epochs=2" # 20
+                - "--batch-size=32"
+                - "--workers=0"
+                - "/workspace/data/tiny-imagenet-200"
+    Worker:
+      replicas: 2
+      restartPolicy: OnFailure
+      template:
+        metadata:
+          annotations:
+            sidecar.istio.io/inject: "false"
+        spec:
+          imagePullSecrets:
+          - name: ecr-token
+          containers:
+            - name: pytorch
+              image: <your_image>
+              # Comment out the below resources to use the CPU.
+              resources:
+                limits:
+                  nvidia.com/gpu: 1
+              command:
+                - python
+                - -m
+                - torch.distributed.run
+                - imagenet.py
+                - "--arch=resnet18"
+                - "--epochs=2" # 20
+                - "--batch-size=32"
+                - "--workers=0"
+                - "/workspace/data/tiny-imagenet-200"
