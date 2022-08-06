@@ -39,7 +39,7 @@ To check if the container is up, execute [`./status.sh`](./status.sh). If the co
 Executing the [`./exec.sh`](./exec.sh) script will open a bash shell inside the `aws-do-kubeflow` container.
 
 ## Deploy Kubeflow
-To deploy your configured distribution of Kubeflow, simply execute ['./kubeflow-deploy.sh](Container-Root/kubeflow/kubeflow-deploy.sh)
+To deploy your configured distribution of Kubeflow, simply execute [`./kubeflow-deploy.sh`](Container-Root/kubeflow/kubeflow-deploy.sh)
 
 The deployment creates several groups of pods in your EKS cluster. Upon successful deployment, all pods will be in Running state. To check the state of all pods in the cluster, use command:
 `kubectl get pods -A`.
