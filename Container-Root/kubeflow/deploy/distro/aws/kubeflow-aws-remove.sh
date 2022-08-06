@@ -7,7 +7,9 @@ if [ -f ../../../../../.env ]; then
 fi
 
 git clone https://github.com/awslabs/kubeflow-manifests.git
-cd kubeflow-manifests
+
+pushd kubeflow-manifests
+
 git checkout ${AWS_RELEASE_VERSION}
 
 git clone --branch ${KUBEFLOW_RELEASE_VERSION} https://github.com/kubeflow/manifests.git upstream
@@ -21,7 +23,9 @@ kubectl delete profile --all
 
 echo ""
 echo "Deleting Kubeflow deployment ..."
-cd $REPO_ROOT
+
+pushd $REPO_ROOT
+
 kustomize build deployments/vanilla/ | kubectl delete -f -
 
 #kustomize build deployments/rds-s3 | kubectl delete -f -
@@ -30,7 +34,11 @@ kubectl delete mutatingwebhookconfigurations.admissionregistration.k8s.io webhoo
 kubectl delete validatingwebhookconfigurations.admissionregistration.k8s.io config.webhook.eventing.knative.dev config.webhook.istio.networking.internal.knative.dev config.webhook.serving.knative.dev
 kubectl delete endpoints -n default mxnet-operator pytorch-operator tf-operator
 
-#cd tests/e2e
+#pushd tests/e2e
 #pip install -r requirements.txt
 #PYTHONPATH=.. python3 utils/rds-s3/auto-rds-s3-cleanup.py
+#popd
+
+popd
+popd
 

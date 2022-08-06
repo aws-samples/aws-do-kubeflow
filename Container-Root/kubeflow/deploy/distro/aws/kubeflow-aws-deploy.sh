@@ -16,13 +16,15 @@ echo ""
 echo "Cloning repositories ..."
 
 git clone https://github.com/awslabs/kubeflow-manifests.git
-cd kubeflow-manifests
+
+pushd kubeflow-manifests
+
 git checkout ${AWS_RELEASE_VERSION}
 
 git clone --branch ${KUBEFLOW_RELEASE_VERSION} https://github.com/kubeflow/manifests.git upstream
 export REPO_ROOT=$(pwd)
 
-cd $REPO_ROOT
+pushd $REPO_ROOT
 
 export KF_INSTALLED=false
 if [ "${KF_AWS_SERVICES_STR}" == "" ]; then
@@ -38,7 +40,7 @@ else
 	echo "Managed services integration in this project is still under development" 	
 	echo "To try this feature, uncomment the relevant lines in script $0"
 
-	#cd tests/e2e
+	#pushd tests/e2e
 	#pip install -r requirements.txt
 	
 	#PYTHONPATH=.. python3 utils/rds-s3/auto-rds-s3-setup.py --region $AWS_REGION --cluster $AWS_CLUSTER_NAME --bucket $S3_BUCKET --s3_aws_access_key_id $AWS_ACCESS_KEY_ID --s3_aws_secret_access_key $AWS_SECRET_ACCESS_KEY
@@ -46,10 +48,14 @@ else
 	##while ! kustomize build deployments/rds-s3 | kubectl apply -f -; do echo "Retrying to apply resources"; sleep 30; done
 	##while ! kustomize build deployments/rds-s3/rds-only | kubectl apply -f -; do echo "Retrying to apply resources"; sleep 30; done
 	##while ! kustomize build deployments/rds-s3/s3-only | kubectl apply -f -; do echo "Retrying to apply resources"; sleep 30; done
+	##popd
 
 	export KF_INSTALLED=false
 
 fi
+
+popd
+popd
 
 echo ""
 if [ "${KF_INSTALLED}" == "true" ]; then
@@ -65,3 +71,4 @@ if [ "${KF_INSTALLED}" == "true" ]; then
 else
 	echo "Kubeflow deployment failed"
 fi
+

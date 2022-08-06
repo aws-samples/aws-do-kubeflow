@@ -6,6 +6,7 @@ if [ -f ../../../../../.env ]; then
         popd
 fi
 
-cd ${KF_DIR}
+pushd ${KF_DIR}
 kfctl delete -V -f ${CONFIG_FILE}
+popd
 

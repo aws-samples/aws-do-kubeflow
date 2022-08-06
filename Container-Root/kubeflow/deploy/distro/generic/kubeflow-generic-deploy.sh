@@ -10,7 +10,7 @@ echo ""
 echo "Deploying opensource Kubeflow ..."
 
 mkdir -p "$KF_DIR"
-cd "$KF_DIR"
+pushd "$KF_DIR"
 
 # Configure deployment
 curl -o kfctl_aws.yaml $CONFIG_URI
@@ -24,4 +24,6 @@ sed -i "s@roles:@#roles:@" ${CONFIG_FILE}
 sed -i "s@- eksctl-$AWS_CLUSTER_NAME-nodegroup-ng-a2-NodeInstanceRole-xxxxxxx@#- eksctl-$AWS_CLUSTER_NAME-nodegroup-ng-a2-NodeInstanceRole-xxxxxxx@" ${CONFIG_FILE}
 
 kfctl apply -V -f ${CONFIG_FILE}
+
+popd
 
