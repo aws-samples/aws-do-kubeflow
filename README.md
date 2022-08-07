@@ -6,6 +6,8 @@
 
 [Kubeflow](https://www.kubeflow.org) is an open source project which deploys on Kubernetes. It provides end-to-end ML platform and workflow capabilities. There are a number of ways to deploy Kubeflow as well as many variations of Kubeflow that can be deployed. The goal of `aws-do-kubeflow` is to simplify the deployment and management of Kubeflow on AWS as well as provide some useful ML examples. This project follows the principles of the [Do Framework](https://bit.ly/do-framework) and the structure of the [Depend on Docker](https://bit.ly/do-docker-project) template. It containerizes all the tools necessary to deploy and manage Kubeflow using [Docker](https://docs.docker.com/get-docker/), then executes the deployment from within the container. All you need is an AWS Account. 
 
+For a hands-on experience with Kubeflow and its application for distributed ML training workflows, please see our online [workshop](Container-Root/kubeflow/examples/distributed-training/pytorch/workshop/README.md) and walk through the self-paced [workshop steps](Container-Root/kubeflow/examples/distributed-training/pytorch/workshop/WORKSHOP_STEPS.md). 
+
 Below is an overview diagram that shows the general architecture of a Kubeflow deployment on EKS.
 
 <center><img src="./img/aws-do-kubeflow-diagram.png" width="80%" /></center> <br/>
