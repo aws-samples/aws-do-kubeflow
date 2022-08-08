@@ -141,10 +141,6 @@ def train(args):
             100.0 * len(test_loader.sampler) / len(test_loader.dataset),
         )
     )
-    
-    #if torch.cuda.device_count() > 1:
-    #    logger.info("Gpu count: {}".format(torch.cuda.device_count()))
-    #    model = nn.DataParallel(model)
       
     model = Net().to(device)
     
@@ -154,14 +150,11 @@ def train(args):
     criterion = nn.CrossEntropyLoss().to(device)
     optimizer = optim.SGD(model.parameters(), lr=args.lr, momentum=args.momentum)
 
-    #mycode
     running_loss=0.0
     running_correct=0
     n_total_steps=len(train_loader)
     
-    #sm_training_env = json.loads(args.train)
-    #jobname = sm_training_env.get('job_name')
-    
+  
     for epoch in range(1, args.epochs + 1):
         model.train()
         for batch_idx, (data, target) in enumerate(train_loader, 1):
@@ -170,8 +163,6 @@ def train(args):
             
             #mycode
             grid=torchvision.utils.make_grid(data)
-            #writer.add_image('images', grid)
-            #writer.add_graph(model, data)
             
             optimizer.zero_grad()
             output = model(data)
@@ -181,9 +172,6 @@ def train(args):
                 _average_gradients(model)
             optimizer.step()
             
-            
-            #mycode
-            #writer.add_scalar('training loss for epocs', loss.item(), epoch)
             running_loss += loss.item()
             pred = output.max(1, keepdim=True)[1]
             running_correct += pred.eq(target.view_as(pred)).sum().item()
@@ -199,11 +187,6 @@ def train(args):
                     )
                 )
                 
-                #mycode
-                #writer.add_scalar('training loss per steps', running_loss/args.log_interval, epoch * n_total_steps + batch_idx)
-                #writer.add_scalar('accuracy per step', running_correct/args.log_interval, epoch * n_total_steps + batch_idx)
-                #subprocess.run(['aws', 's3', 'sync', '/opt/ml/output/tensorboard/', 's3://sagemaker-us-west-2-913278749917/jobs/tensorboard/' + str(jobname),'--only-show-errors'])
-
                 running_loss=0.0
                 running_correct=0
                 
