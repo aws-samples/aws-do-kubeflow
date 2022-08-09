@@ -77,9 +77,6 @@ sudo su ec2-user
 cd ~/.ssh
 vi authorized_keys
 ```
-```
-echo <paste> | tee -a /home/ec2-user/authorized_keys
-```
 
 2.9 Switch back to the Cloud9 screen, type ec2-user in the User field and paste the public IP address of your EC2 instance in the Host field, then click the Copy key to clipboard button.
 
@@ -89,6 +86,8 @@ echo <paste> | tee -a /home/ec2-user/authorized_keys
 2.10 Open the Session Manager window and paste the copied public key into the authorized_keys file and save 
 
 <center><img src="img/cloud9_paste_publickey.png" width="20%"/> </center> <br/><br/>
+
+To save authorized_keys file, Press Esc to enter Command mode, and then type :wq to write and then hit enter to quit the file.
 
 
 2.11 Then click “Next step” in the Cloud9 console and “Create environment” on the Review screen.
