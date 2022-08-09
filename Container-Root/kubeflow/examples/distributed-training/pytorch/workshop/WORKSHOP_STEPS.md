@@ -249,9 +249,17 @@ watch kubectl get pods -A
 
 6.9 Run notebook "0_initialize_dependencies.ipynb". Please wait for it to finish execution before you move on to next step
 
-6.10 Run notebook “1_submit_pytorchdist_k8s.ipynb”       
+6.10 Run notebook “1_submit_pytorchdist_k8s.ipynb”      
+
+Please ensure notebook '0_initialize_dependencies.ipynb' has finished executing the install scripts before you start with this notebook.
 
 6.11 Run notebook “2_create_pipeline_k8s_sagemaker.ipynb”    
+
+Please ensure you have executed notebook '1_submit_pytorchdist_k8s.ipynb' before you start with this notebook
+
+If you get sagemaker import error then please do 
+     1. !pip install sagemaker
+     2. restart the Kernel (Go to 'Kernel' Menu -> Click 'Restart Kernel...')
 
 6.12 Click on “Run details” link in the following cell. 
 

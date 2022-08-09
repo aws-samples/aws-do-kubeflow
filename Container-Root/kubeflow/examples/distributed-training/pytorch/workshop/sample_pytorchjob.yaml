@@ -1,0 +1,77 @@
+apiVersion: "kubeflow.org/v1"
+kind: "PyTorchJob"
+metadata:
+  name: "pytorch-cnn-dist-job"
+  annotations:
+    kubernetes.io/service-account.name: default
+spec:
+  pytorchReplicaSpecs:
+    Master:
+      replicas: 1
+      restartPolicy: OnFailure
+      template:
+        metadata:
+          annotations:
+            sidecar.istio.io/inject: "false"
+            kubernetes.io/service-account.name: default
+        spec:
+          serviceAccountName: default
+          containers:
+            - name: pytorch
+              image: 763104351884.dkr.ecr.us-west-2.amazonaws.com/pytorch-training:1.12.0-cpu-py38-ubuntu20.04-e3
+              volumeMounts:
+                - mountPath: /efs-sc-claim
+                  name: efs-sc-claim
+              args:
+                - python
+                - ./efs-sc-claim/cifar10-distributed-gpu-final.py
+                - --epochs
+                - "5"
+                - --seed
+                - "7"
+                - --log-interval
+                - "60"
+                - --efs-dir-path
+                - "cifar10-dataset"
+              resources:
+                limits:
+                  cpu: 1
+          volumes:
+              - name: efs-sc-claim
+                persistentVolumeClaim:
+                  claimName: efs-sc-claim
+
+    Worker:
+      replicas: 2
+      restartPolicy: OnFailure
+      template:
+        metadata:
+          annotations:
+            sidecar.istio.io/inject: "false"
+            kubernetes.io/service-account.name: default
+        spec:
+          containers:
+            - name: pytorch
+              image: 763104351884.dkr.ecr.us-west-2.amazonaws.com/pytorch-training:1.12.0-cpu-py38-ubuntu20.04-e3
+              volumeMounts:
+                - mountPath: /efs-sc-claim
+                  name: efs-sc-claim
+              args:
+                - python
+                - ./efs-sc-claim/cifar10-distributed-gpu-final.py
+                - --epochs
+                - "5"
+                - --seed
+                - "7"
+                - --log-interval
+                - "60"
+                - --efs-dir-path
+                - "cifar10-dataset"
+              resources:
+                limits:
+                  cpu: 1
+          volumes:
+              - name: efs-sc-claim
+                persistentVolumeClaim:
+                  claimName: efs-sc-claim
+            
