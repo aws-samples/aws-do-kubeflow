@@ -40,7 +40,7 @@ The following screen shows up.
 
 ## 2. Register Cloud9 Environment
 
-2.1 If you are using **your own account**, you can create a Cloud9 environment and and EKS cluster, following steps 0 and 1 from [this workshop](https://github.com/aws-samples/aws-distributed-training-workshop-eks).
+2.1 If you are using **your own account**, you can create a Cloud9 environment and EKS cluster, following steps 0 and 1 from [this workshop](https://github.com/aws-samples/aws-distributed-training-workshop-eks).
 
 2.2 If you are running the workshop **at an AWS Event or with AWS teams**, an EKS cluster and an EC2 instance that has access to the cluster and has Cloud9 installed is already created for you. This section will describe  how to register your existing instance as a Cloud9 environment. 
 
@@ -148,7 +148,7 @@ watch kubectl get pods -A
 ./exec.sh
 ```
 
-3.7 Execute the below script once step 3.6 competes
+3.7 Execute the below script once step 3.6 completes
 
 ```
 ./kubeflow-deploy.sh
@@ -215,7 +215,7 @@ watch kubectl get pods -A
 <center><img src="img/4_kubeflow_create_jupyter.png" width="80%"/> </center><br/><br/>
 
 
-6.2 Do not change "Workshace Volume" section. 
+6.2 Do not change "Workspace Volume" section. 
 
 6.3 Click "Attach existing volume" in Data Volumes section. Expand Existing volume secion. Select Name as "efs-sc-claim" and enter "/home/jovyan/efs-sc-claim" as Mount path. 
 
@@ -238,7 +238,7 @@ watch kubectl get pods -A
 <center><img src="img/7_jupyterlab.png" width="80%"/> </center><br/><br/>
 
 
-6.7 Clone the repo by entering “https://github.com/aws-samples/aws-do-kubeflow” in "Clone a repo" field
+6.7 Clone the repo by entering `https://github.com/aws-samples/aws-do-kubeflow` in "Clone a repo" field
 
 <center><img src="img/8_git_clone1.png" width="80%"/> </center><br/><br/>
 
