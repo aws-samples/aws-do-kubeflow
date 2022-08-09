@@ -1,4 +1,4 @@
 #!/bin/bash
 
-kubectl -n kubeflow delete pods $(kubectl -n kubeflow get pods | cut -d ' ' -f 1)
+kubectl -n kubeflow delete pods $(kubectl -n kubeflow get pods | grep -v NAME | cut -d ' ' -f 1)
 
