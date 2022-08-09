@@ -1,4 +1,4 @@
-# Workshop: Distributed Model Training on Kuberenets with Kubeflow on AWS and Amazon SageMaker
+# Workshop: Distributed Model Training on Kubernetes with Kubeflow on AWS and Amazon SageMaker
 
 ## 1. Introduction 
 
@@ -6,7 +6,7 @@ In this workshop, we demonstrate how Kubeflow on AWS integration with AWS Deep L
 
 Machine learning development relies on complex and continuously evolving open source frameworks and toolkits, as well as complex and continuously evolving hardware ecosystems. This poses a challenge when scaling up machine learning development to a cluster. Containers offer a solution, since they can fully encapsulate not just the training code, but the entire dependency stack down to the hardware libraries, ensuring a machine learning environment that is consistent and portable. and facilitating reproducibility of the training environment on each individual node. Kubernetes is a widely adopted system for automating deployment, scaling, and management of containerized applications.
 
-Kubeflow aims to make the deployment of machine learning end-to-end workflows on Kubernetes simple, portable and scalable. Customers are leveraging Kubeflow to deploy best-of-breed open-source systems for machine learning to diverse infrastructures.  This tutorial will demonstrate how to leverage Kubeflow to implement a machine learning pipeline  for distributed training based on either a self-managed approach, or leveraging the SageMaker platform.  At the end, we will demonstrate the implementation of a hybrid reference architecture that allows for customers to chose between both approaches at run-time, conferring maximum control and flexibility  to customers with stringent needs for their deployments.
+Kubeflow aims to make the deployment of machine learning end-to-end workflows on Kubernetes simple, portable and scalable. Customers are leveraging Kubeflow to deploy best-of-breed open-source systems for machine learning to diverse infrastructures.  This tutorial will demonstrate how to leverage Kubeflow to implement a machine learning pipeline  for distributed training based on either a self-managed approach, or leveraging the SageMaker platform.  At the end, we will demonstrate the implementation of a hybrid reference architecture that allows for customers to choose between both approaches at run-time, conferring maximum control and flexibility  to customers with stringent needs for their deployments.
 
 ## 2. Kubeflow on AWS
 

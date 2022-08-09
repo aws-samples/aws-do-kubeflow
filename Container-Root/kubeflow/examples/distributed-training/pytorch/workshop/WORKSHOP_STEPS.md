@@ -210,7 +210,7 @@ watch kubectl get pods -A
 
 ## 6. Create Jupyter Notebook 
 
-6.1 Click on “Notebooks” on left navigation of the Kubeflow dashboard. Click on “New Notebook” button. Enter name as “aws-hybrid-nb”, select “jupyter-pytorch:1.11.0-cpu-py38” as Jupyter Docket Image. Enter 1 for CPU and 1 as memory in Gi. Keep GPUs as None.
+6.1 Click on “Notebooks” on left navigation of the Kubeflow dashboard. Click on “New Notebook” button. Enter name as “aws-hybrid-nb”, select “jupyter-pytorch:1.11.0-cpu-py38” as Jupyter Docket Image. Enter 1 for CPU and 5 as memory in Gi. Keep GPUs as None.
 
 
 <center><img src="img/4_kubeflow_create_jupyter.png" width="80%"/> </center><br/><br/>
@@ -248,12 +248,13 @@ watch kubectl get pods -A
 
 6.8 Browse to "aws-do-kubeflow/Container-Root/kubeflow/examples/distributed-training/pytorch/workshop" folder
 
-6.9 Run notebook “1_submit_pytorchdist_k8s.ipynb”       
+6.9 Run notebook "0_initialize_dependencies.ipynb". Please wait for it to finish execution before you move on to next step
 
-6.10. Run notebook “2_create_pipeline_k8s_sagemaker.ipynb”    
+6.10 Run notebook “1_submit_pytorchdist_k8s.ipynb”       
 
-6.11 Click on “Run details” link in the following cell. 
+6.11 Run notebook “2_create_pipeline_k8s_sagemaker.ipynb”    
 
+6.12 Click on “Run details” link in the following cell. 
 
 <center><img src="img/9_run_details.png" width="80%"/> </center><br/><br/>
 
