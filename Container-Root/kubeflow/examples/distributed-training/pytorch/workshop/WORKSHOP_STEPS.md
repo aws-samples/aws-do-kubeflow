@@ -187,7 +187,7 @@ watch kubectl get pods -A
 
 <center><img src="img/1_kubeflow_dashboard.png" width="80%"/> </center><br/><br/>
 
-> **_NOTE:_** If you do not see the namespace "kubeflow-user-example-com" selected in your Kubeflow dashboard, or you experience any other errors, please execute script `./kubeflow-restart.sh`. 
+> **_NOTE:_** If you do not see the namespace "kubeflow-user-example-com" selected in your Kubeflow dashboard, or you experience any other errors, please execute script `./kubeflow-restart.sh`, located in the aws-do-kubeflow container.
 
 ## 5. Create EFS volume
 
