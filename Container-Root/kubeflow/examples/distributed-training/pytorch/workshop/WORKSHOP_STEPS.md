@@ -182,11 +182,12 @@ watch kubectl get pods -A
 
 4.4 Enter the default credentials (user@example.com / 12341234) to log in to your Kubeflow instance.
 
-4.5 Once you are logged into the Kubeflow dashboard, ensure you have the right namespace “kubeflow-user-example-com” on top of the drop down 
+4.5 Once you are logged into the Kubeflow dashboard, ensure you have the right namespace "kubeflow-user-example-com" on top of the drop down 
 
 
 <center><img src="img/1_kubeflow_dashboard.png" width="80%"/> </center><br/><br/>
 
+> **_NOTE:_** If you do not see the namespace "kubeflow-user-example-com" selected in your Kubeflow dashboard, or you experience any other errors, please execute script `./kubeflow-restart.sh`. 
 
 ## 5. Create EFS volume
 
