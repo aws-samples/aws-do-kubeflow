@@ -26,9 +26,9 @@ spec:
     projected:
       sources:
       - serviceAccountToken:
-        path: token
-        expirationSeconds: 7200
-        audience: pipelines.kubeflow.org
+          path: token
+          expirationSeconds: 7200
+          audience: pipelines.kubeflow.org
   volumeMounts:
   - mountPath: /var/run/secrets/kubeflow/pipelines
     name: volume-kf-pipeline-token
