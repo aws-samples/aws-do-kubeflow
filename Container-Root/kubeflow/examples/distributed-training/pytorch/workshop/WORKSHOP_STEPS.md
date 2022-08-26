@@ -2,7 +2,7 @@
 
 ## 1. Set up AWS Accounts
 
-1.1 If you are running the workshop **on your own** and you don’t already have an AWS account with Administrator access, please create one now by clicking here (https://aws.amazon.com/getting-started/)
+1.1 If you are running the workshop **on your own** and you don’t already have an AWS account with Administrator access, please create one now by clicking here (https://aws.amazon.com/getting-started/). This workshop assumes that you already have an EKS cluster. If not, we recommend that you refer to the [aws-do-eks](https://github.com/aws-samples/aws-do-eks) project and create one using the [eks-kubeflow.yaml](https://github.com/aws-samples/aws-do-eks/blob/main/Container-Root/eks/eks-kubeflow.yaml) cluster manifest.
 
 1.2 If you are running the workshop **at an AWS Event or with AWS teams**, Login to AWS Workshop Portal by clicking the button or browsing to https://dashboard.eventengine.run/
 
