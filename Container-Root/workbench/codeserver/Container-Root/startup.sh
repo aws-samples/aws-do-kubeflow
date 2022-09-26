@@ -7,5 +7,5 @@ echo ""
 cat /startup/workbench.txt
 echo ""
 
-/usr/lib/code-server/lib/node /usr/lib/code-server --bind-addr 0.0.0.0:8080 --disable-telemetry --auth none
+/usr/lib/code-server/lib/node /usr/lib/code-server --bind-addr 0.0.0.0:8888 --disable-telemetry --auth none
 

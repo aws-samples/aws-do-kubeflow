@@ -9,8 +9,8 @@ fi
 apt-get update
 apt-get install -y sudo python3-dev libpq-dev htop openssl
 
-echo "alias ll='ls -alh --color=auto'" >> /root/.bashrc
-echo "alias ll='ls -alh --color=auto'" >> /home/jovyan/.bashrc
+echo "alias ll='ls -alh --color=auto'" >> /etc/bash.bashrc
+echo "alias k=kubectl" >> /etc/bash.bashrc
 
 echo "echo ''; cat /startup/workbench.txt; echo ''" >> /etc/bash.bashrc
 
@@ -23,3 +23,15 @@ if [ "${PASSWD}" != "" ]; then
     echo "${PASSWD}\n${PASSWD}" | passwd jovyan
 fi
 
+# Install kubectl
+curl -Lo kubectl https://dl.k8s.io/release/v1.24.0/bin/linux/amd64/kubectl
+chmod +x ./kubectl
+mv ./kubectl /usr/local/bin
+kubectl version --client
+
+# Install AWS CLI
+curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+unzip awscliv2.zip
+./aws/install
+rm -rf ./aws
+rm -f awscliv2.zip
