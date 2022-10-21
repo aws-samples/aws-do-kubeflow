@@ -15,7 +15,7 @@ spec:
         spec:
           containers:
             - name: pytorch
-              image: 110605085135.dkr.ecr.us-west-2.amazonaws.com/pytorch-mnist:latest
+              image: <account_num>.dkr.ecr.us-west-2.amazonaws.com/pytorch-mnist:latest
               imagePullPolicy: Always
               command:
                 - "python3"
@@ -31,7 +31,7 @@ spec:
         spec:
           containers:
             - name: pytorch
-              image: 110605085135.dkr.ecr.us-west-2.amazonaws.com/pytorch-mnist:latest
+              image: <account_num>.dkr.ecr.us-west-2.amazonaws.com/pytorch-mnist:latest
               imagePullPolicy: Always
               command:
                 - "python3"
