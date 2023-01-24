@@ -1,6 +1,6 @@
 <img alt="aws-do-kubeflow" src="./img/aws-do-kubeflow-1024.png" width="25%" align="right" />
 
-# AWS do Kubeflow (aws-do-kubeflow) <br/> Deploy and Manage Kubeflow on AWS EKS <br/> <br/>
+# AWS do Kubeflow (aws-do-kubeflow) <br/> Deploy and Manage Kubeflow on AWS EKS using the [do-framework](https://bit.ly/do-framework)
 
 ## Overview
 
