@@ -1,6 +1,6 @@
 <img alt="aws-do-kubeflow" src="./img/aws-do-kubeflow-1024.png" width="25%" align="right" />
 
-# AWS do Kubeflow (aws-do-kubeflow) <br/> Deploy and Manage Kubeflow on AWS EKS using the [do-framework](https://bit.ly/do-framework)
+# AWS do Kubeflow (aws-do-kubeflow) <br/> Deploy and Manage Kubeflow on AWS using the [do-framework](https://bit.ly/do-framework)
 
 ## Overview
 
@@ -8,7 +8,7 @@
 
 For a hands-on experience with Kubeflow and its application for distributed ML training workflows, please see our online [workshop](Container-Root/kubeflow/examples/distributed-training/pytorch/workshop/README.md) and walk through the self-paced [workshop steps](Container-Root/kubeflow/examples/distributed-training/pytorch/workshop/WORKSHOP_STEPS.md). 
 
-Below is an overview diagram that shows the general architecture of a Kubeflow deployment on EKS.
+Below is an overview diagram that shows the general architecture of a Kubeflow deployment on Amazon EKS.
 
 <center><img src="./img/aws-do-kubeflow-diagram.png" width="80%" /></center> <br/>
 <center>Fig.1 - Deployment Architecture</center> <br/>
