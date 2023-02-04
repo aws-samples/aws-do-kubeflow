@@ -24,6 +24,5 @@ AWS distribution of kubeflow provide enterprise grade semi-managed kubeflow serv
 
 ## 5. Workshop Steps
 
-Please refer [WORKSHOP_STEPS](WORKSHOP_STEPS.md#workshop-steps) for workshop execution steps.
-
+To complete the hands-on part of this workshop, please proceed to [WORKSHOP_STEPS](WORKSHOP_STEPS.md#workshop-steps).
 
