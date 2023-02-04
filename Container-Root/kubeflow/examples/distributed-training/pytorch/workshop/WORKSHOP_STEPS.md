@@ -93,12 +93,21 @@ To save authorized_keys file, Press Esc to enter Command mode, and then type :wq
 2.11 Then click “Next step” in the Cloud9 console and “Create environment” on the Review screen.
 
 
-<center><img src="img/cloud9_review.png" width="80%"/> <br/>
+<center><img src="img/cloud9_review.png" width="80%"/> </center><br/>
 
 2.12 The browser will open the newly created Cloud9 environment. We will use this environment for the remainder of the workshop. You may close the Session Manager window. 
 
 <center><img src="img/cloud9_newly_created.png" width="80%"/> </center><br/><br/>
 
+2.13 Ensure AWS managed temporary credentials in Cloud9 are disabled
+
+If you are using your own Cloud9 environment, it comes with AWS manged temporary credentials enabled by default. These credentials may override other credentials that you set in the environment and therefore we will make sure to disable them.
+
+Click on the settings icon in the upper right corner of the Cloud9 IDE, or click on the Cloud9 icon in the menu and select Preferences. Scroll the list of preferences down and select the `AWS Settings` section. Make sure the `AWS managed temporary credentials` settings is diabled as shown below.
+
+<center><img src="img/cloud9_managed_credentials.png" width="80%"/> </center><br/><br/>
+
+If this setting is not available in your `AWS Settings` menu, then your Cloud9 environment did not come with managed temporary credentials enabled and you do not have to disable them.
 
 ## 3. Deploy Kubeflow
 
@@ -174,11 +183,12 @@ watch kubectl get pods -A
 <center><img src="img/cloud9_preview.png" width="80%"/> </center><br/><br/>
 
 
-4.3 This will display your the Kubeflow login screen inside a tab within the Cloud9 environment. Click the detach icon located next to the“Browser” button in the right corner of the tab to open the Kubeflow dashboard in a separate browser window.
+4.3 This will display the Kubeflow login screen inside a tab within the Cloud9 environment. Click the detach icon located next to the “Browser” button in the right corner of the tab to open the Kubeflow dashboard in a separate browser tab.
 
 
 <center><img src="img/dex_login.png" width="80%"/></center><br/><br/>
 
+If the Kubeflow dashboard fails to open in a separate browser tab, go to the troubleshooting section at the end of this page.
 
 4.4 Enter the default credentials (user@example.com / 12341234) to log in to your Kubeflow instance.
 
@@ -230,7 +240,7 @@ watch kubectl get pods -A
 6.5 Verify if notebook is created successfully and CONNECT button is activated. It might takes couple of minutes to create a notebook. 
 
 
-<center><img src="img/6_notebook_success.png" width="80%"/> <center/><br/><br/>
+<center><img src="img/6_notebook_success.png" width="80%"/> </center><br/><br/>
 
 
 6.6 Click on CONNECT button to log on to JupyterLab like below. 
@@ -271,3 +281,35 @@ You will see the pipeline run executed .
 
 <center><img src="img/10_pipeline.png" width="80%"/> </center><br/><br/>
 
+## 7. Cleanup
+
+7.1. Remove Kubeflow from your EKS cluster
+
+To uninstall Kubeflow from your cluster, from your `aws-do-kubeflow` container, execute:
+
+```bash
+./kubeflow-remove.sh
+```
+
+7.2. Remove EKS cluster (Optional)
+
+If you provisioned your EKS cluster specifically for this workshop using the [aws-do-eks](https://bit.ly/do-eks) project and would like to remove it, from your `aws-do-eks` container shell, execute:
+
+```
+./eks-delete.sh
+```
+
+Clean up of all resources is complete when the related stacks in Cloud Formation have been deleted. You may delete the cluster-related stacks from the Cloud Formation console manually as an alternative to executing the `./eks-delete.sh` script.
+
+# Troubleshooting
+
+This section contains common challenges that were experienced by users of this workshop and their respective solutions.
+
+<table align="center" valign="top">
+<tr><th>ID</th><th>Challenge</th><th>Reason</th><th>Solution</th></tr>
+<tr><td>1</td><td>`./kubeflow-deploy.sh` script fails</td><td>Your `aws-do-kubeflow` container is not connected to the EKS cluster</td><td>1. Execute `kubectl get nodes` within the container to verify connectivity.<br/>2. Execute `kubectx` within the container to list configured clusters<br/>3. Ensure `~/.kube/config` contins your desired cluster configuration. If not, you may leverage the [`./eks-connect.sh`](https://github.com/aws-samples/aws-do-eks/blob/main/Container-Root/eks/eks-connect.sh) script from the [aws-do-eks](https://bit.ly/do-eks) project.<br/>4. Ensure the name of the connected EKS cluster matches the [`AWS_CLUSTER_NAME`](https://github.com/aws-samples/aws-do-kubeflow/blob/main/.env#L19) configured in your [aws-do-kubeflow](https://bit.ly/aws-do-kubeflow) project</td></tr>
+<tr><td>2</td><td>Kubeflow dashboard fails to open through Cloud9. `Ooops...` displayed instead of dashboard<br/>or<br/>Kubeflow dashboard is open, but `[403] Could not find CSRF cookie XSRF-TOKEN in the request` error displayed in browser status bar. </td><td>Cloud9 VFS session connection failure</td><td>List of independent possible solutions:<br/>1. Re-login to your AWS account and reopen Cloud9, the retry opening the Kubeflow dashboard<br/>2. Open Cloud9 in a different browser and retry openeing the Kubeflow dashboard<br/>3. Configure access to your EKS cluster on your local machine instead of from Cloud9 and then execute the `kubeflow-expose.sh` script locally. Visit http://localhost:8080 to access the Kubeflow dashboard.<br/>4. Expose the Istio Ingress Gateway service through a classic load balancer by executing `kubectl -n istio-system edit service istio-ingressgateway` and replacing `NodePort` with `LoadBalancer`. The command `kubectl -n istio-system get svc` will show the external address of the load balancer. Copy the address and visit http://<your_external_lb_address> in your browser. Once the Kubeflow dashboard comes up, to secure your Kubeflow connection, edit the security group associated with your load balancer to allow HTTP traffic only from your own external IP address.<br/>5. Work with your IT department to expose your Kubeflow instance behind an Application Load Balancer with a domain name and SSL certificate</td></tr>
+<tr><td>4</td><td>`efs-sc` is not available as an option in the storage class dropdown in the volumes section of the Kubeflow dashboard</td><td>EFS CSI driver is not deployed or efs-sc storage class is not created</td><td>1. Diagnose the issue: execute `kubectl get pods -A | grep efs` to check if the EFS CSI pods are present and in Running state, also execute `kubectl get sc` to find out if the `efs-sc` storage class is available. If either is missing, go to step 2, otherwise try step 3.<br/>2. Deploy the EFS CSI driver by using the [`deploy.sh`](https://github.com/aws-samples/aws-do-eks/blob/main/Container-Root/eks/deployment/csi/efs/deploy.sh) script in the [aws-do-eks](https://bit.ly/do-eks) project.<br/>3. In case the storage class is still not available, restart Kubeflow by executing [`./kubeflow-restart.sh`](https://github.com/aws-samples/aws-do-kubeflow/blob/main/Container-Root/kubeflow/kubeflow-restart.sh) from within your `aws-do-kubeflow` container </td></tr>
+<tr><td>5</td><td>SageMaker pipeline execution fails with error in `connection.py`</td><td>Missing VPC endpoint or permissions</td><td>Refer to the VPC Endpoint creation line in [the Cloud Formation script](https://github.com/aws-samples/aws-do-eks/blob/main/wd/cfn/ManagementInstance.json#L60) which is used to create a standard environment for this workshop. Execute the `vpc/vpc-endpoint-create.sh` script from the [aws-do-eks](https://bit.ly/aws-do-eks) project. Also execute the `iam/node-role-expand.sh` and `iam/sm-role-create.sh` scripts if that has not been done when your workshop environment was set up</td></tr>
+<tr><td>6</td><td>SageMaker pipeline execution fails due to insufficient permission to launch P3 instances</td><td>P3 EC2 instances are disallowed by default</td><td>1. In the Create hybrid Kubeflow Pipeleine section of the [distributed-training-pipeline]() Jupyter notebook, replace `instance_type='ml.p3.2xlarge'` with `instance_type='ml.c5.2xlarge' or another CPU EC2 instance type of your choice<br/>or<br/>2. From your AWS Console, request an increase of your P3 quota for SageMaker following the information [here](https://docs.aws.amazon.com/sagemaker/latest/dg/regions-quotas.html#:~:text=General%20Reference.-,Quotas,-For%20a%20list). Additionally, you may contact your AWS Technical Account Manager (TAM) or AWS Support team regarding your request</td></tr>
+</table>
