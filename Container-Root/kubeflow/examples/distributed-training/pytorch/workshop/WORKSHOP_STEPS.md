@@ -19,7 +19,7 @@ sudo su ec2-user
 kubectl get nodes
 ```
 
-If the above command returns a list of nodes, then you may proceed to `step 2`. Otherwise, please double-check the `bootstrap.log` and CloudFormation stacks for any errors. Refer to the [Troubleshooting](https://github.com/aws-samples/aws-do-kubeflow/blob/main/Container-Root/kubeflow/examples/distributed-training/pytorch/workshop/WORKSHOP_STEPS.md#troubleshooting) section as needed.
+If the above command returns a list of nodes, then you may proceed to [step 2](https://github.com/aws-samples/aws-do-kubeflow/blob/main/Container-Root/kubeflow/examples/distributed-training/pytorch/workshop/WORKSHOP_STEPS.md#2-register-cloud9-environment). Otherwise, please double-check the `bootstrap.log` and CloudFormation stacks for any errors. Refer to the [Troubleshooting](https://github.com/aws-samples/aws-do-kubeflow/blob/main/Container-Root/kubeflow/examples/distributed-training/pytorch/workshop/WORKSHOP_STEPS.md#troubleshooting) section as needed.
 
 
 1.2 If you are running the workshop **at an AWS Event or with AWS teams**, Login to AWS Workshop Portal by clicking the button or browsing to https://dashboard.eventengine.run/
