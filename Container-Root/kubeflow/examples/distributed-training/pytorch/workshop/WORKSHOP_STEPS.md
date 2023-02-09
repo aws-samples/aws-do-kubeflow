@@ -319,6 +319,13 @@ If you provisioned your EKS cluster specifically for this workshop using the [aw
 
 Clean up of all resources is complete when the related stacks in Cloud Formation have been deleted. You may delete the cluster-related stacks from the Cloud Formation console manually as an alternative to executing the `./eks-delete.sh` script.
 
+7.3. Remove Management Instance (Optional)
+
+If you used the CloudFormation template in the beginning of the workshop to create your EKS cluster and wish to remove the management instance, you may do so by deleting the ManagementInstance CloudFormation stack or executing the following command:
+
+```bash
+aws cloudformation delete-stack --stack-name ManagementInstance
+```
 
 <br/><br/>
 
