@@ -8,6 +8,4 @@ curl -o kustomize -L https://github.com/kubernetes-sigs/kustomize/releases/downl
 chmod +x kustomize
 mv ./kustomize /usr/local/bin
 
-#mv /kustomize /usr/local/bin
-
 kustomize version
