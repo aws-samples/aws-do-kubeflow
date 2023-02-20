@@ -122,4 +122,4 @@ This library is licensed under the MIT-0 License. See the [LICENSE](LICENSE) fil
 * [Kubeflow MPI Operator](https://github.com/kubeflow/mpi-operator)
 * [Distributed Training with Tensorflow and Kubeflow](https://github.com/aws-samples/amazon-eks-machine-learning-with-terraform-and-kubeflow)
 * [Distributed Training using Pytorch with Kubeflow](Container-Root/kubeflow/examples/distributed-training/pytorch/workshop/README.md)
-
+* [Build Flexiblena dn Sacalable Distributed Training Architectures using Kubeflow on AWS and Amazon SageMaeker](https://aws.amazon.com/blogs/machine-learning/build-flexible-and-scalable-distributed-training-architectures-using-kubeflow-on-aws-and-amazon-sagemaker/)
