@@ -1,6 +1,8 @@
 import requests
 import os
 import json
+import base64
+from base64 import b64encode
 
 CLUSTER_IP = os.environ.get("CLUSTER_IP", "localhost:8080")
 DASHBOARD_URL = f"http://{CLUSTER_IP}"
