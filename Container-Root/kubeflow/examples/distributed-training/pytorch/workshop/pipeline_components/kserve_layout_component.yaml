@@ -6,7 +6,7 @@ inputs:
   - {name: model_archive_name, type: String}
 implementation:
   container:
-    image: 458473390725.dkr.ecr.us-west-2.amazonaws.com/kfp:latest
+    image: {image_url}
     command: ["/bin/sh","/app/submit.sh"]
     args: 
       - {inputValue: bucket}
