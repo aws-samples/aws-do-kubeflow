@@ -14,7 +14,6 @@ RUN pip install torch-model-archiver
 WORKDIR /app
 
 COPY model.py model.py
-COPY model_kserve.pth model_kserve.pth
 COPY model_handler.py model_handler.py
 COPY config.properties config.properties
 COPY submit.sh submit.sh
