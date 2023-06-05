@@ -34,9 +34,12 @@ class CIFARImageClassifier(ImageClassifier):
     def preprocess(self, data):
         # Base64 encode the image to avoid the framework throwing
         # non json encodable errors
-        print("printing right value:")
+        print("printing right value v1:")
+        
         
         def img_data(data):
+            data_dict={}
+
             def get_all_keys(data):
                 if isinstance(data, dict):
                     for key, value in data.items():
@@ -45,8 +48,13 @@ class CIFARImageClassifier(ImageClassifier):
                         if isinstance(value, dict):
                             yield from get_all_keys(value)
                 if isinstance(data, list):
-                    yield data
-                    
+                    unk_object=data[0]
+                    if(isinstance(unk_object, dict)):
+                        if(list(unk_object.keys())[0]).startswith('data'):
+                            yield data
+                        else:
+                            yield img_data(unk_object)  
+
             for data_dict in get_all_keys(data):
                 data_dict=data_dict
 
@@ -58,7 +66,7 @@ class CIFARImageClassifier(ImageClassifier):
         
         b64_data = []
         for row in data:
-            print("printing row data:")
+            print("printing row data v1:")
             print(row)
             #input_data = row.get("image_bytes")("b64") or row.get("body")
             input_data = row["data"]
