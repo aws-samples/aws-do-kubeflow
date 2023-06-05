@@ -19,16 +19,46 @@ class CIFARImageClassifier(ImageClassifier):
             "activities" : [ProfilerActivity.CPU],
             "record_shapes": True,
         }
+        
+    def get_all_keys(d):
+        if isinstance(d, dict):
+            for key, value in d.items():
+                if(key.startswith('instances')):
+                    yield value
+                if isinstance(value, dict):
+                    yield from get_all_keys(value)
+        if isinstance(d, list):
+            yield d
+
 
     def preprocess(self, data):
         # Base64 encode the image to avoid the framework throwing
         # non json encodable errors
-        print("printing")
+        print("printing right value:")
+        
+        def img_data(data):
+            def get_all_keys(data):
+                if isinstance(data, dict):
+                    for key, value in data.items():
+                        if(key.startswith('instances')):
+                            yield value
+                        if isinstance(value, dict):
+                            yield from get_all_keys(value)
+                if isinstance(data, list):
+                    yield data
+                    
+            for data_dict in get_all_keys(data):
+                data_dict=data_dict
+
+            return data_dict
+        
+        data=img_data(data)
+            
         print(data)
         
         b64_data = []
         for row in data:
-            print("printing row data")
+            print("printing row data:")
             print(row)
             #input_data = row.get("image_bytes")("b64") or row.get("body")
             input_data = row["data"]
