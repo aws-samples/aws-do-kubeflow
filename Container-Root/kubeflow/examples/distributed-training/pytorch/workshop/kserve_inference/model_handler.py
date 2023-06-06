@@ -34,7 +34,7 @@ class CIFARImageClassifier(ImageClassifier):
     def preprocess(self, data):
         # Base64 encode the image to avoid the framework throwing
         # non json encodable errors
-        print("printing right value v1:")
+        print("printing right value v2:")
         
         
         def img_data(data):
@@ -65,14 +65,22 @@ class CIFARImageClassifier(ImageClassifier):
         print(data)
         
         b64_data = []
-        for row in data:
-            print("printing row data v1:")
-            print(row)
-            #input_data = row.get("image_bytes")("b64") or row.get("body")
-            input_data = row["data"]
-            # Wrap the input data into a format that is expected by the parent
-            # preprocessing method
+        
+        if(isinstance(data, list)):
+            for row in data:
+                print("printing row data v2:")
+                print(row)
+                #input_data = row.get("image_bytes")("b64") or row.get("body")
+                input_data = row["data"]
+                # Wrap the input data into a format that is expected by the parent
+                # preprocessing method
+                b64_data.append({"body": base64.b64decode(input_data)})
+        else:
+            print("printing direct data v2:")
+            print(data["data"])
+            input_data = data["data"]
             b64_data.append({"body": base64.b64decode(input_data)})
+    
         return ImageClassifier.preprocess(self, b64_data)
     
     
