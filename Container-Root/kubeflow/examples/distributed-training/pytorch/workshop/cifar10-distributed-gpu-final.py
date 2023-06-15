@@ -273,7 +273,8 @@ def save_model(model, model_dir):
         path = os.path.join(model_dir, "model.pth")
         logger.info("model save path - {}".format(path))
 
-        torch.save(model.cpu().state_dict(), path)
+        #torch.save(model.cpu().state_dict(), path)
+        torch.save(model.module.state_dict(), path)
 
 if __name__ == "__main__":
     logger.info("Starting the script.")
@@ -315,6 +316,10 @@ if __name__ == "__main__":
     parser.add_argument("--model-dir", type=str, default=os.environ.get("SM_MODEL_DIR", "/opt/ml/model"))
  
     args=parser.parse_args()
+    
+    # Copy inference pre/post-processing script so that it'll be included in the model package
+    os.system('mkdir /opt/ml/model')
+    os.system('cp inference.py /opt/ml/model')
     
     train(args)
     
