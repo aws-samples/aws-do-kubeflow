@@ -1,5 +1,6 @@
 from kubeflow.training import TrainingClient
 from kubeflow.training.constants import constants
+import humps
 
 def save_master_worker_spec(pytorch_client: TrainingClient, pytorch_jobname: str) -> str:
     """save_master_worker_spec saves master and worker spec to a pipeline_yaml_specifications folder. """
@@ -10,17 +11,27 @@ def save_master_worker_spec(pytorch_client: TrainingClient, pytorch_jobname: str
         print("Please pass a valid pytorch client")
     if (not len(pytorch_jobname) or pytorch_jobname is None):
         print("Please pass a valid job name")
+        
+    if not os.path.exists('pipeline_yaml_specifications'):
+        os.makedirs('pipeline_yaml_specifications')
        
     pytorchjob=pytorch_client.get_pytorchjob(pytorch_jobname)
     
     master_spec=pytorchjob.spec.pytorch_replica_specs['Master'].to_dict()
     worker_spec=pytorchjob.spec.pytorch_replica_specs['Worker'].to_dict()
+    run_policy=pytorchjob.spec.run_policy.to_dict()
+    master_spec=humps.camelize(master_spec)
+    worker_spec=humps.camelize(worker_spec)
+    run_policy=humps.camelize(run_policy)
     
     with open('pipeline_yaml_specifications/pipeline_master_spec.yml', 'w') as yaml_outfile_file:
-        yaml.dump(master_spec, yaml_outfile_file, allow_unicode=True)
+        yaml.dump(master_spec, yaml_outfile_file, default_flow_style=False)
     
     with open('pipeline_yaml_specifications/pipeline_worker_spec.yml', 'w') as yaml_outfile_file:
         yaml.dump(worker_spec, yaml_outfile_file, default_flow_style=False)
+        
+    with open('pipeline_yaml_specifications/pipeline_run_policy.yml', 'w') as yaml_outfile_file:
+        yaml.dump(run_policy, yaml_outfile_file, default_flow_style=False)
         
     return "specs saved in ./pipeline_yaml_specifications folder" 
     

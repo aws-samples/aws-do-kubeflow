@@ -1,0 +1,4 @@
+pyyaml
+kubernetes
+retrying
+kubeflow-training==1.6.0
