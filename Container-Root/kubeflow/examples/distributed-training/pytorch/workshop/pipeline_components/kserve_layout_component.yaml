@@ -4,12 +4,13 @@ inputs:
   - {name: bucket, type: String}
   - {name: model_input, type: String}
   - {name: model_archive_name, type: String}
+  - {name: model_uri, type: String}
 implementation:
   container:
-    image: {image_url}
+    image:  '273931337282.dkr.ecr.us-west-2.amazonaws.com/kserve_layout:latest'
     command: ["/bin/sh","/app/submit.sh"]
     args: 
       - {inputValue: bucket}
       - {inputValue: model_input}
       - {inputValue: model_archive_name}
-   
+      - {inputValue: model_uri}
