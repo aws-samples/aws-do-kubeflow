@@ -4,7 +4,7 @@ import logging
 import os
 import sys
 import boto3
-
+import tarfile
 
 import torch
 import torch.distributed as dist
@@ -251,30 +251,89 @@ def save_model(model, model_dir):
     logger.info("Saving the model.")
     #isExist = os.path.exists(model_dir)
     #logger.info("model_dir exists ? - {}".format(isExist))
-    
+  
     if "SM_CHANNEL_TRAIN" not in os.environ:
         model_dir="/"+args.efs_mount_path
-        path = os.path.join(model_dir, "model.pth")
+        
+    # if not os.path.exists(model_dir):
+    #     logger.info("The new directory is: - {}".format(model_dir))
+    #     os.makedirs(model_dir)
+        
+    path = os.path.join(model_dir, "model.pth")
+    torch.save(model.cpu().state_dict(), path)
 
-        #os.makedirs(model_dir)
-        logger.info("The new directory is: - {}".format(model_dir))
+    updated_path=remove_ddp_model(model_dir, "model.pth")
+    # logger.info("Updated Path of new model after removing ddp module: - {}".format(path))
         
-        torch.save(model.cpu().state_dict(), path)
+    if "SM_CHANNEL_TRAIN" not in os.environ:
+        logger.info(f"S3 bucket: - {args.s3bucket}")
         
-        updated_path=remove_ddp_model(model_dir, "model_kserve.pth")
+        with tarfile.open("model.tar.gz", "w:gz") as tar:
+            tar.add(updated_path, arcname="model.pth")
+            tar.add(f"{model_dir}/inference.py", arcname="inference.py")
         
-        logger.info("Updated Path of new model after removing ddp module: - {}".format(path))
-        
+        updated_path= "model.tar.gz"
         s3 = boto3.resource(service_name = 's3')
-        logger.info("S3 bucket: - {}".format(args.s3bucket))
-        s3.meta.client.upload_file(Filename = updated_path, Bucket = args.s3bucket, Key = 'model_kserve.pth')
+        s3.meta.client.upload_file(Filename = updated_path, Bucket = args.s3bucket, Key = "model.tar.gz")
         
-    else:
-        path = os.path.join(model_dir, "model.pth")
-        logger.info("model save path - {}".format(path))
+    
+# # We have saved the model using nn.DataParallel, which stores the model in module, and we wont be able to load it without DataParallel. So below we create a new ordered dict without the module prefix, and load it back.
+# def remove_ddp_model(model_dir, new_model_name):
+#     from collections import OrderedDict
+    
+#     path = os.path.join(model_dir, "model.pth")
+    
+#     logger.info("Path of current model: - {}".format(path))
+    
+#     model = Net()
+#     # Original saved file with DataParallel
+#     checkpoint = torch.load(path,map_location=lambda storage, loc: storage)
 
-        #torch.save(model.cpu().state_dict(), path)
-        torch.save(model.module.state_dict(), path)
+#     new_state_dict = OrderedDict()
+#     for k, v in checkpoint.items():
+#         name = k[7:] # remove `module.`
+#         new_state_dict[name] = v
+
+#     # Load parameters
+#     model.load_state_dict(new_state_dict)
+    
+#     path = os.path.join(model_dir, new_model_name)
+    
+#     logger.info("Path of new model after removing ddp module: - {}".format(path))
+
+#     torch.save(new_state_dict, path)
+    
+#     return path
+
+# def save_model(model, model_dir):
+#     logger.info("Saving the model.")
+#     #isExist = os.path.exists(model_dir)
+#     #logger.info("model_dir exists ? - {}".format(isExist))
+    
+#     if "SM_CHANNEL_TRAIN" not in os.environ:
+#         model_dir="/"+args.efs_mount_path
+#         path = os.path.join(model_dir, "model.pth")
+
+#         #os.makedirs(model_dir)
+#         logger.info("The new directory is: - {}".format(model_dir))
+        
+#         torch.save(model.cpu().state_dict(), path)
+        
+#         updated_path=remove_ddp_model(model_dir, "model.pth")
+        
+#         logger.info("Updated Path of new model after removing ddp module: - {}".format(path))
+        
+#         s3 = boto3.resource(service_name = 's3')
+#         logger.info("S3 bucket: - {}".format(args.s3bucket))
+#         s3.meta.client.upload_file(Filename = updated_path, Bucket = args.s3bucket, Key = 'model.pth')
+        
+#     else:
+#         path = os.path.join(model_dir, "model.pth")
+#         logger.info("model save path - {}".format(path))
+
+#         #torch.save(model.cpu().state_dict(), path)
+#         torch.save(model.module.state_dict(), path)
+        
 
 if __name__ == "__main__":
     logger.info("Starting the script.")
@@ -318,8 +377,8 @@ if __name__ == "__main__":
     args=parser.parse_args()
     
     # Copy inference pre/post-processing script so that it'll be included in the model package
-    os.system('mkdir /opt/ml/model')
-    os.system('cp inference.py /opt/ml/model')
+    if os.path.exists('/opt/ml/model'):
+        os.system('cp inference.py /opt/ml/model')
     
     train(args)
     
