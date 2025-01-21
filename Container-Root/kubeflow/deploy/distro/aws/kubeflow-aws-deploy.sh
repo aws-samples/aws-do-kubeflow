@@ -7,6 +7,22 @@ if [ -f ../../../../../.env ]; then
 fi
 
 echo ""
+
+#####################################
+###################
+#IMPLEMENT PREREQUISITES CHECK
+
+#../check_prerequisites.sh
+
+#if [ "${KF_AWS_SERVICES_STR}" == "" ]; then
+#	do deploy
+#else 
+#	do not
+#fi
+###################
+#####################################
+
+
 echo "Deploying AWS Kubeflow ..."
 
 echo "KUBEFLOW_RELEASE_VERSION=$KUBEFLOW_RELEASE_VERSION"
