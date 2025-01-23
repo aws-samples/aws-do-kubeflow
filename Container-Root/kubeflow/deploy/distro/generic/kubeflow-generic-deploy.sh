@@ -1,5 +1,10 @@
 #!/bin/bash
 
+if [ "$ALL_CHECKS_PASSED" != "true" ]; then
+    echo "Environment variable ALL_CHECKS_PASSED is not true. Exiting script. Please check the output and run this script again."
+    exit 1
+fi
+
 if [ -f ../../../../../.env ]; then
 	pushd ../../../../../
 	source .env
@@ -7,25 +12,7 @@ if [ -f ../../../../../.env ]; then
 fi
 
 echo ""
-
-#####################################
-###################
-#IMPLEMENT PREREQUISITES CHECK
-
-#../check_prerequisites.sh
-
-#if [ "${KF_AWS_SERVICES_STR}" == "" ]; then
-#	do deploy
-#else 
-#	do not
-#fi
-###################
-#####################################
-
-
 echo "Deploying opensource Kubeflow ..."
-
-echo "Removing existing mpijobs.kubeflow CRD deployment..."
 
 mkdir -p "$KF_DIR"
 pushd "$KF_DIR"
@@ -107,7 +94,4 @@ fi
 
 #################################
 #################################
-
-
-
 
