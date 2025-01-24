@@ -23,7 +23,6 @@ check_mpijobs() {
 
 # Function to check if Istio is installed
 check_istio() {
-    echo "Checking if Istio is installed..."
     if kubectl get pods -n istio-system --no-headers 2>/dev/null | grep -q '.'; then
         echo "Istio appears to be installed (pods found in 'istio-system' namespace)."
         echo "Please remove your istio installation to avoid any conflicts in the Kubeflow deployment. Afterwards, please re-run this script."

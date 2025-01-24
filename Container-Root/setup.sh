@@ -1,5 +1,7 @@
 #!/bin/sh
 
+source /wd/.env
+
 # configure proxy
 if [ -d /etc/apt ]; then
         [ -n "$http_proxy" ] && echo "Acquire::http::proxy \"${http_proxy}\";" > /etc/apt/apt.conf; \

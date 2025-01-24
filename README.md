@@ -34,7 +34,7 @@ The Amazon FSx for Lustre Container Storage Interface (CSI) driver uses IAM role
 Create an IAM OIDC identity provider for your cluster with the following command:
 
 ```bash
-eksctl utils associate-iam-oidc-provider --cluster $EKS_CLUSTER_NAME --approve
+eksctl utils associate-iam-oidc-provider --cluster $AWS_CLUSTER_NAME --approve
 ```
 
 Deploy the FSx for Lustre CSI driver:
@@ -56,7 +56,7 @@ eksctl create iamserviceaccount \
   --name fsx-csi-controller-sa \
   --override-existing-serviceaccounts \
   --namespace kube-system \
-  --cluster $EKS_CLUSTER_NAME \
+  --cluster $AWS_CLUSTER_NAME \
   --attach-policy-arn arn:aws:iam::aws:policy/AmazonFSxFullAccess \
   --approve \
   --role-name AmazonEKSFSxLustreCSIDriverFullAccess \
