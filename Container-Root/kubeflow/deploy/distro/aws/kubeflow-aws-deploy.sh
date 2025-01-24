@@ -1,31 +1,25 @@
 #!/bin/bash
 
-if [ -f ../../../../../.env ]; then
-        pushd ../../../../../
-        source .env
-        popd
+../check_prerequisites.sh
+
+if [ "$ALL_CHECKS_PASSED" != "true" ]; then
+    echo "Environment variable ALL_CHECKS_PASSED is not true. Exiting script. Please check the output and run this script again."
+    exit 1
 fi
 
+if [ -f ../../../../../.env ]; then
+	pushd ../../../../../
+	source .env
+	popd
+fi
+
+
 echo ""
-
-#####################################
-###################
-#IMPLEMENT PREREQUISITES CHECK
-
-#../check_prerequisites.sh
-
-#if [ "${KF_AWS_SERVICES_STR}" == "" ]; then
-#	do deploy
-#else 
-#	do not
-#fi
-###################
-#####################################
 
 
 echo "Deploying AWS Kubeflow ..."
 
-echo "KUBEFLOW_RELEASE_VERSION=$KUBEFLOW_RELEASE_VERSION"
+echo "KUBEFLOW_RELEASE_VERSION=$OSS_KUBEFLOW_RELEASE_VERSION_FOR_AWS"
 echo "AWS_RELEASE_VERSION=$AWS_RELEASE_VERSION"
 
 echo ""
@@ -37,7 +31,7 @@ pushd kubeflow-manifests
 
 git checkout ${AWS_RELEASE_VERSION}
 
-git clone --branch ${KUBEFLOW_RELEASE_VERSION} https://github.com/kubeflow/manifests.git upstream
+git clone --branch ${OSS_KUBEFLOW_RELEASE_VERSION_FOR_AWS} https://github.com/kubeflow/manifests.git upstream
 export REPO_ROOT=$(pwd)
 
 pushd $REPO_ROOT

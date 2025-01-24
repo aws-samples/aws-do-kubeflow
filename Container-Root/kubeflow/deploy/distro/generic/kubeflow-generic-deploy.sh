@@ -1,5 +1,7 @@
 #!/bin/bash
 
+../check_prerequisites.sh
+
 if [ "$ALL_CHECKS_PASSED" != "true" ]; then
     echo "Environment variable ALL_CHECKS_PASSED is not true. Exiting script. Please check the output and run this script again."
     exit 1
