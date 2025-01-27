@@ -9,6 +9,12 @@
 
 set -e
 
+if [ -f /wd/.env ]; then
+        pushd /wd
+        source .env
+        popd
+fi
+
 # Create an IAM OIDC identity provider for your cluster with the following command:
 
 eksctl utils associate-iam-oidc-provider --cluster $AWS_EKS_CLUSTER --approve

@@ -2,9 +2,11 @@
 
 set -e
 
-pushd /aws-do-hyperpod
-source .env
-popd
+if [ -f /wd/.env ]; then
+        pushd /wd
+        source .env
+        popd
+fi
 
 # Determine if cluster is EKS or HyperPod
 export AWS_EKS_HYPERPOD_CLUSTER=$(/kubeflow/ops/hyperpod-name.sh)
