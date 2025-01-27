@@ -143,12 +143,13 @@ The deployment creates several groups of pods in your EKS cluster. Upon successf
 ## Access Kubeflow Dashboard
 In order to access the Kubeflow Dashboard, the Istio Ingress Gateway service of this Kubeflow deployment needs to be exposed outside the cluster. In a production deployment this is typically done via an Application Load Balancer (ALB), however this requires a DNS domain registration and a matching SSL certificate. 
 
-For an easy way to expose the Kubeflow Dashboard, we can use `kubectl port-forward` from Cloud9 or from any machine that has a browser and kubectl access to the cluster.
+For an easy way to expose the Kubeflow Dashboard, we can use `kubectl port-forward` from from any machine that has a browser and kubectl access to the cluster.
 To start the port-forward, execute script [`./kubeflow-expose.sh`](Container-Root/kubeflow/kubeflow-expose.sh). 
 
-If you are in Cloud9, select Preview->Preview Running Application. This will open a browser tab within Cloud9. You can expand that tab to a full-browser by clicking the icon in the upper-right corner.
-
 If you are on a machine with its own browser, just navigate to localhost:8080 to open the Kubeflow Dashboard.
+
+> [!NOTE]  
+> Kubeflow uses a default email (`user@example.com`) and password (`12341234`). For any production Kubeflow deployment, you should change the default password by following the official [Kubeflow documentation](https://github.com/kubeflow/manifests?tab=readme-ov-file#change-default-user-password).
 
 <center><img src="img/aws-kubeflow-dashboard.png" align="center" width="80%" /></center> <br/>
 <center>Fig. 3 - Kubeflow Dashboard</center> <br/>
