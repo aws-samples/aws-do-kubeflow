@@ -1,5 +1,4 @@
 #!/bin/bash
-
 # This script intergrates your EKS cluster or EKS Hyperpod Cluster with Amazon FSx for Lustre.
 # To learn more about FSx and the steps involved in setting it up, please refer to the following links
 # https://aws.amazon.com/blogs/opensource/using-fsx-lustre-csi-driver-amazon-eks/

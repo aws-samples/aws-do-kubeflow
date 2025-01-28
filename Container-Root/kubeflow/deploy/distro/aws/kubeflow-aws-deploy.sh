@@ -1,5 +1,4 @@
 #!/bin/bash
-
 source ../check_prerequisites.sh
 
 if [ "$ALL_CHECKS_PASSED" != "true" ]; then
@@ -36,6 +35,10 @@ pushd kubeflow-manifests
 git checkout ${AWS_RELEASE_VERSION}
 
 git clone --branch ${OSS_KUBEFLOW_RELEASE_VERSION_FOR_AWS} https://github.com/kubeflow/manifests.git upstream
+
+# Remove v2beta2 and replace with v2
+grep -rl 'autoscaling/v2beta2' . | xargs sed -i 's/autoscaling\/v2beta2/autoscaling\/v2/g'
+
 export REPO_ROOT=$(pwd)
 
 pushd $REPO_ROOT

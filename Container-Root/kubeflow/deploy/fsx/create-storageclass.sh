@@ -1,6 +1,5 @@
 #!/bin/bash
-
-set -e
+#set -e
 
 if [ -f /wd/.env ]; then
         source /wd/.env

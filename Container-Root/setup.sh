@@ -10,7 +10,7 @@ if [ -d /etc/apt ]; then
 fi
 
 # install tools
-apt-get update && apt-get install -y curl wget jq vim git watch python3-distutils python3-apt python3-pip 
+apt-get update && apt-get install -y curl wget jq vim git watch python3-distutils python3-apt python3-pip gettext-base
 
 # Install utilities
 #./install/install-python.sh
