@@ -7,10 +7,14 @@ if [ "$ALL_CHECKS_PASSED" != "true" ]; then
     exit 1
 fi
 
-if [ -f ../../../../../.env ]; then
-	pushd ../../../../../
-	source .env
-	popd
+# if [ -f ../../../../../.env ]; then
+# 	pushd ../../../../../
+# 	source .env
+# 	popd
+# fi
+
+if [ -f /wd/.env ]; then
+	source /wd/.env
 fi
 
 echo ""

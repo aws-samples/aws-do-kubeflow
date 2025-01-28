@@ -7,7 +7,7 @@ metadata:
 provisioner: fsx.csi.aws.com
 parameters:
   subnetId: $SUBNET_ID
-  securityGroupIds: $SECURITY_GROUP
+  securityGroupIds: $SECURITYGROUP_ID
   deploymentType: PERSISTENT_2
   automaticBackupRetentionDays: "0"
   copyTagsToBackups: "true"

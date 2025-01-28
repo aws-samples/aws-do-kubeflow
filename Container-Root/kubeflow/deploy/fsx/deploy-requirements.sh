@@ -9,12 +9,6 @@
 
 set -e
 
-if [ -f /wd/.env ]; then
-        pushd /wd
-        source .env
-        popd
-fi
-
 # Create an IAM OIDC identity provider for your cluster with the following command:
 
 eksctl utils associate-iam-oidc-provider --cluster $AWS_EKS_CLUSTER --approve
@@ -26,7 +20,7 @@ helm repo add aws-fsx-csi-driver https://kubernetes-sigs.github.io/aws-fsx-csi-d
 helm repo update
 
 helm upgrade --install aws-fsx-csi-driver aws-fsx-csi-driver/aws-fsx-csi-driver\
-  --namespace kube-system 
+  --namespace kube-system
 
 # Use the eksctl CLI  to create an IAM role bound to the service account used by the driver, attaching the AmazonFSxFullAccess AWS-managed policy:
 

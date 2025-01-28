@@ -3,9 +3,7 @@
 set -e
 
 if [ -f /wd/.env ]; then
-        pushd /wd
-        source .env
-        popd
+        source /wd/.env
 fi
 
 # Determine if cluster is EKS or HyperPod
@@ -68,7 +66,6 @@ echo $SECURITYGROUP_ID
 
 
 echo "Applying storageclass.yaml"
-envsubst < /aws-do-kubeflow/Container-Root/kubeflow/deploy/fsx/storageclass.yaml | kubectl apply  -f -
-
-
-
+#envsubst < /kubeflow/deploy/fsx/storageclass.yaml | kubectl apply  -f -
+#kubectl apply -f /kubeflow/deploy/fsx/storageclass.yaml
+envsubst < storageclass.yaml | kubectl apply -f -

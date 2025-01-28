@@ -1,9 +1,13 @@
 #!/bin/bash
 
-if [ -f ../../../../../.env ]; then
-        pushd ../../../../../
-        source .env
-        popd
+# if [ -f ../../../../../.env ]; then
+#         pushd ../../../../../
+#         source .env
+#         popd
+# fi
+
+if [ -f /wd/.env ]; then
+	source /wd/.env
 fi
 
 git clone https://github.com/awslabs/kubeflow-manifests.git
