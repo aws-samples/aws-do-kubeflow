@@ -1,11 +1,5 @@
 #!/bin/bash
 
-# if [ -f ../../../../../.env ]; then
-#         pushd ../../../../../
-#         source .env
-#         popd
-# fi
-
 if [ -f /wd/.env ]; then
 	source /wd/.env
 fi

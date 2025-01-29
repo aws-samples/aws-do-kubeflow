@@ -6,12 +6,6 @@ if [ "$ALL_CHECKS_PASSED" != "true" ]; then
     exit 1
 fi
 
-# if [ -f ../../../../../.env ]; then
-# 	pushd ../../../../../
-# 	source .env
-# 	popd
-# fi
-
 if [ -f /wd/.env ]; then
 	source /wd/.env
 fi
@@ -36,7 +30,8 @@ git checkout ${AWS_RELEASE_VERSION}
 
 git clone --branch ${OSS_KUBEFLOW_RELEASE_VERSION_FOR_AWS} https://github.com/kubeflow/manifests.git upstream
 
-# Remove v2beta2 and replace with v2
+# As some of the Kubeflow depolyment manifests still rely on v2beta2 for some of the components (e.g. knative-serving HorizontalPodAutoscaler), we need to 
+# remove v2beta2 and replace with v2 to avoid conflicts due to unsupported versions
 grep -rl 'autoscaling/v2beta2' . | xargs sed -i 's/autoscaling\/v2beta2/autoscaling\/v2/g'
 
 export REPO_ROOT=$(pwd)

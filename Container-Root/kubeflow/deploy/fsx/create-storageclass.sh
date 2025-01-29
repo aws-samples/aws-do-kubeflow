@@ -45,6 +45,7 @@ if [ "$CLUSTER_TYPE" == "hyperpod" ]; then
       --group-id $SECURITYGROUP_ID_HYPERPOD \
       --protocol all \
       --port all \
+      --region $AWS_REGION \
       --source-group $SECURITYGROUP_ID_HYPERPOD 2>&1 | grep -v "InvalidPermission.Duplicate"
 else
     SECURITYGROUP_ID=$SECURITYGROUP_ID_EKS
@@ -55,6 +56,7 @@ aws ec2 authorize-security-group-ingress \
   --group-id $SECURITYGROUP_ID_EKS \
   --protocol all \
   --port all \
+  --region $AWS_REGION \
   --source-group $SECURITYGROUP_ID_EKS 2>&1 | grep -v "InvalidPermission.Duplicate"
 
 

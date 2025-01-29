@@ -27,6 +27,11 @@ The deployment process is described on Fig. 2 below:
 ## Create Default StorageClass
 In order for all the components of Kubeflow to work properly, some require a persistent volume which they will attach to the corresponding pod. These components will create the volumes automatically during the deployment of Kubeflow. However, in order for them to create these volumes, they require a default StorageClass to be set up in your EKS cluster. Below we show how to set up a default StorageClass for [FSx for Lustre](https://aws.amazon.com/fsx/lustre/). Note that you can use other storage options (e.g. [EFS](https://aws.amazon.com/efs/)) and do not have to use FSx for Lustre. 
 
+In order to deploy a Default StorageClass, you can either use our automatic deployment scripts or set up all the necessary resources yourself. For both options we provide a detailed step-by-step guide below.
+
+<details>
+<summary>Manual deployment</summary>
+
 ### Install the Amazon FSx for Lustre CSI Driver
 
 The Amazon FSx for Lustre Container Storage Interface (CSI) driver uses IAM roles for service accounts (IRSA) to authenticate AWS API calls. To use IRSA, an IAM OpenID Connect (OIDC) provider needs to be associated with the OIDC issuer URL that comes provisioned your EKS cluster.
@@ -96,7 +101,7 @@ metadata:
 provisioner: fsx.csi.aws.com
 parameters:
   subnetId: $SUBNET_ID
-  securityGroupIds: $SECURITY_GROUP
+  securityGroupIds: $SECURITYGROUP_ID
   deploymentType: PERSISTENT_2
   automaticBackupRetentionDays: "0"
   copyTagsToBackups: "true"
@@ -113,6 +118,20 @@ Now, deploy this StorageClass to take effect:
 ```bash
 kubectl apply -f storageclass.yaml
 ```
+
+</details>
+
+<details>
+<summary>Automatic deployment</summary>
+
+1. Navigate into the `deployments/fsx/` directory by using `cd /kubeflow/deployments/fsx`
+2. Execute the `deploy-requirements.sh` script 
+3. Execute the `create-storageclass.sh` script 
+
+>[!NOTE]
+> If you would like to use a different kind of storage for your default StorageClass, simply install the necessary CSI drivers and edit the `storageclass.yaml` accordingly
+
+</details>
 
 ## Configure 
 All configuration settings of the `aws-do-kubeflow` project are centralized in its [`.env`](.env) file. To review or change any of the settings, simply execute [`./config.sh`](./config.sh). The AWS_CLUSTER_NAME setting must match the name of your existing EKS Cluster, and AWS_REGION should match the AWS Region where the cluster is deployed.
