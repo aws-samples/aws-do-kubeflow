@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #This script clear any namespaces that are stuck in the Terminating state
-
+kubectl proxy &
 mapfile -t namespaces < <( kubectl get namespace | grep Terminating | awk '{print $1}' )
 
 if [ "${#namespaces[@]}" == "0" ]; then
