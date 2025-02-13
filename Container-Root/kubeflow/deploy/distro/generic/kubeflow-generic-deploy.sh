@@ -42,6 +42,8 @@ export KF_INSTALLED=false
 if [ "${KF_AWS_SERVICES_STR}" == "" ]; then
         echo "Deploying OSS Kubeflow ..."
         echo "Running kustomize loop ..."
+        # Remove v2beta2 and replace with v2
+        # grep -rl 'autoscaling/v2beta2' . | xargs sed -i 's/autoscaling\/v2beta2/autoscaling\/v2/g'
         while ! kustomize build example | kubectl apply -f -; do echo "Retrying to apply resources"; sleep 30; done
         echo ""
         echo "Waiting for all Kubeflow pods to start Running ..."
