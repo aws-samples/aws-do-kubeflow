@@ -13,7 +13,7 @@ check_mpijobs() {
         echo "Version of 'mpijobs.kubeflow.org': $VERSION"
         if [ "$VERSION" != "v1" ]; then
             echo "Version mismatch: Expected 'v1' but found '$VERSION'."
-            echo "Please remove the current installation of 'mpijob.kubeflow.org' to avoid conflicts when deploying Kubeflow. Afterwards, please re-run this script."
+            echo "Please remove the current installation of 'mpijobs.kubeflow.org' to avoid conflicts when deploying Kubeflow. Afterwards, please re-run this script."
             ALL_CHECKS_PASSED=false
         fi
     else
