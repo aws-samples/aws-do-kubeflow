@@ -47,6 +47,7 @@ if [ "${KF_AWS_SERVICES_STR}" == "" ]; then
         while ! kustomize build example | kubectl apply -f -; do echo "Retrying to apply resources"; sleep 30; done
         echo ""
         echo "Waiting for all Kubeflow pods to start Running ..."
+        echo "This can take up to 30 minutes ..."
         sleep 3
         CNT=$(kubectl -n kubeflow get pods | grep -v NAME | grep -v Running | wc -l)
         while [ ! "$CNT" == "0" ]; do

@@ -159,6 +159,9 @@ To deploy your configured distribution of Kubeflow, simply execute [`./kubeflow-
 The deployment creates several groups of pods in your EKS cluster. Upon successful deployment, all pods will be in Running state. To check the state of all pods in the cluster, use command:
 `kubectl get pods -A`.
 
+> [!NOTE]  
+> Please note that the complete deployment takes up to 30 minutes until all resources and pods are in `running` state.
+
 ## Access Kubeflow Dashboard
 In order to access the Kubeflow Dashboard, the Istio Ingress Gateway service of this Kubeflow deployment needs to be exposed outside the cluster. In a production deployment this is typically done via an Application Load Balancer (ALB), however this requires a DNS domain registration and a matching SSL certificate. 
 
@@ -170,8 +173,16 @@ If you are on a machine with its own browser, just navigate to localhost:8080 to
 > [!NOTE]  
 > Kubeflow uses a default email (`user@example.com`) and password (`12341234`). For any production Kubeflow deployment, you should change the default password by following the official [Kubeflow documentation](https://github.com/kubeflow/manifests?tab=readme-ov-file#change-default-user-password).
 
+> [!NOTE]  
+> Please change the mount path for Notebook Volumes when creating a new notebook to avoid `permission denied` errors. You can use e.g. `/volume/` 
+
+
 <center><img src="img/aws-kubeflow-dashboard.png" align="center" width="80%" /></center> <br/>
 <center>Fig. 3 - Kubeflow Dashboard</center> <br/>
+
+
+
+
 
 ## Remove Kubeflow Deployment
 To remove your Kubeflow deployment, simply execute [`./kubeflow-remove.sh`](Container-Root/kubeflow/kubeflow-remove.sh) from within the `aws-do-kubeflow` container.

@@ -163,6 +163,7 @@ if [ "${KF_AWS_SERVICES_STR}" == "" ]; then
 
         echo ""
         echo "Waiting for all Kubeflow pods to start Running ..."
+        echo "This can take up to 30 minutes ..."
         sleep 3
         CNT=$(kubectl -n kubeflow get pods | grep -v NAME | grep -v Running | wc -l)
         while [ ! "$CNT" == "0" ]; do
