@@ -1,5 +1,7 @@
 #!/bin/sh
 
+source /wd/.env
+
 # configure proxy
 if [ -d /etc/apt ]; then
         [ -n "$http_proxy" ] && echo "Acquire::http::proxy \"${http_proxy}\";" > /etc/apt/apt.conf; \
@@ -8,7 +10,7 @@ if [ -d /etc/apt ]; then
 fi
 
 # install tools
-apt-get update && apt-get install -y curl wget jq vim git watch python3-distutils python3-apt python3-pip
+apt-get update && apt-get install -y curl wget jq vim git watch python3-distutils python3-apt python3-pip gettext-base
 
 # Install utilities
 #./install/install-python.sh
@@ -23,6 +25,7 @@ apt-get update && apt-get install -y curl wget jq vim git watch python3-distutil
 ./install/install-docker.sh
 ./install/install-eksctl.sh
 ./install/install-kfctl.sh
+./install/install-helm.sh
 
 # install aws cli
 pip3 install awscli --upgrade

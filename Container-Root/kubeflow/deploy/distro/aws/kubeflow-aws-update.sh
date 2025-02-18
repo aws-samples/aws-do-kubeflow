@@ -1,15 +1,13 @@
 #!/bin/bash
 
-if [ -f ../../../../../.env ]; then
-        pushd ../../../../../
-        source .env
-        popd
+if [ -f /wd/.env ]; then
+	source /wd/.env
 fi
 
 echo ""
 echo "Updating AWS Kubeflow ..."
 
-echo "KUBEFLOW_RELEASE_VERSION=$KUBEFLOW_RELEASE_VERSION"
+echo "KUBEFLOW_RELEASE_VERSION=$OSS_KUBEFLOW_RELEASE_VERSION_FOR_AWS"
 echo "AWS_RELEASE_VERSION=$AWS_RELEASE_VERSION"
 
 pushd kubeflow-manifests

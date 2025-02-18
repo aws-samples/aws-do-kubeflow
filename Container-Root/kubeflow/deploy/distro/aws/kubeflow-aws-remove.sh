@@ -1,9 +1,7 @@
 #!/bin/bash
 
-if [ -f ../../../../../.env ]; then
-        pushd ../../../../../
-        source .env
-        popd
+if [ -f /wd/.env ]; then
+	source /wd/.env
 fi
 
 git clone https://github.com/awslabs/kubeflow-manifests.git
@@ -12,7 +10,7 @@ pushd kubeflow-manifests
 
 git checkout ${AWS_RELEASE_VERSION}
 
-git clone --branch ${KUBEFLOW_RELEASE_VERSION} https://github.com/kubeflow/manifests.git upstream
+git clone --branch ${OSS_KUBEFLOW_RELEASE_VERSION_FOR_AWS} https://github.com/kubeflow/manifests.git upstream
 export REPO_ROOT=$(pwd)
 
 echo ""

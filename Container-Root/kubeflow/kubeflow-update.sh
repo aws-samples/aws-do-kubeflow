@@ -2,6 +2,10 @@
 
 # Deploys the Kubeflow configuration specified in .env
 
+if [ -f /wd/.env ]; then
+	source /wd/.env
+fi
+
 case "$KF_DISTRO" in 
 
 	"generic")
